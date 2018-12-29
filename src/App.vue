@@ -4,7 +4,7 @@
     <h1>SKILLTREE</h1>
     <br />
     <div id="loginForm">
-      <input type="text" name="username" v-model="input.username" placeholder="Username" />
+      <input type="email" name="username" v-model="input.email" placeholder="Email" />
       <br />
       <br />
       <input type="password" name="password" v-model="input.password" placeholder="Password" />
@@ -20,9 +20,30 @@ export default {
   data () {
     return {
       input: {
-        username: "",
+        email: "",
         password: ""
       }
+    }
+  },
+  methods: {
+    login(){
+      if(validateLoginForm()){
+        this.$http.post('http://skillt.coredumped.es/login', input).then(okResponse => {
+          //TODO: Go to main webpage
+        }, errorResponse => {
+          //TODO: Display error, login is bad
+        })
+      }
+    },
+    validateLoginForm(){
+      return this.validateEmail(this.input.email) && this.validatePassword(this.input.password)
+    },
+    validateEmail(email) {
+      var re = /\S+@\S+\.\S+/;
+      return re.test(email);
+    },
+    validatePassword(password) {
+      return password.length > 8
     }
   }
 }
